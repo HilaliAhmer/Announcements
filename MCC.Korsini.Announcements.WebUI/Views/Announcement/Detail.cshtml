@@ -1,0 +1,116 @@
+﻿@using System.IO
+@model MCC.Korsini.Announcements.WebUI.ViewModels.AnnouncementDetailViewModel
+@{
+
+    ViewData["Title"] = "Duyuru Detayı";
+}
+@section Scripts {
+    <script>
+        // Modal'i gösteren fonksiyon
+        function showDeleteModal() {
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+            return false; // Formun doğrudan gönderilmesini engelle
+        }
+
+        // Formu gönderen fonksiyon
+        function submitDeleteForm() {
+            document.getElementById('deleteForm').submit();
+        }
+
+        function summarizeText() {
+            // Özetlenecek metni al
+            var text = $("#announcementText").text();
+
+            // AJAX isteği ile özetleme talebi gönder
+            $.ajax({
+                url: '@Url.Action("SummarizeText", "Announcement")',
+                type: 'POST',
+                data: { text: text },
+                success: function (response) {
+                    // Yanıttaki özeti özet alanına yazdır
+                    $("#summaryContainer").html("<h4>Özet:</h4><p>" + response.summary + "</p>");
+                },
+                error: function () {
+                    alert("Özet çıkarılamadı. Lütfen tekrar deneyin.");
+                }
+            });
+        }
+    </script>
+}
+<div class="container">
+    <!-- Özetin görüneceği alan -->
+    <div id="summaryContainer" style="margin-top: 20px;"></div>
+    <h3>Duyuru Detayı</h3>
+    <div class="card mb-3">
+        <div class="card-header">( <strong>@Model.AnnouncementId - @Model.Type</strong> ) @Model.Title_TR / @Model.Title_EN</div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title_TR</h5>
+            <p class="card-text">@Html.Raw(Model.Content_TR)</p>
+            <hr/>
+            <h5 class="card-title">@Model.Title_EN</h5>
+            <p class="card-text">@Html.Raw(Model.Content_EN)</p>
+
+            @if (Model.FilePaths != null && Model.FilePaths.Any())
+            {
+                <h5 class="mt-4">Ek Dosyalar</h5>
+                <ul class="list-group mb-3">
+                    @foreach (var (fullPath, displayName) in Model.FilePaths)
+                    {
+                        <li class="list-group-item">
+                            <a href="@Url.Content("~/uploads/" + fullPath)" target="_blank">@displayName</a>
+                        </li>
+                    }
+                </ul>
+            }
+
+            @if (Model.Publishing == false)
+            {
+                <form class="row g-3 p-2" asp-action="PublishAnnouncementEmail" asp-controller="Announcement" method="post">
+                    <input type="hidden" name="id" value="@Model.ID"/>
+                    <button type="submit" class="btn btn-info">Yayınla</button>
+                </form>
+
+                <div class="row g-3 p-2">
+                    <a asp-action="EditAnnouncement" asp-controller="Announcement" asp-route-id="@Model.ID" class="btn btn-warning">Düzenle</a>
+                </div>
+
+                <form id="deleteForm" class="row g-3 p-2" asp-action="DeleteAnnouncement" asp-controller="Announcement" method="post">
+                    <input type="hidden" name="id" value="@Model.ID"/>
+
+                    <!-- Ana Sil Düğmesi, modal'i açar -->
+                    <button type="button" class="btn btn-danger" onclick="return showDeleteModal();">Sil</button>
+
+                    <!-- Modal Yapısı -->
+                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">(@Model.AnnouncementId) - @Model.Title_TR Silinsin mi?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>(@Model.AnnouncementId) - @Model.Title_TR isimli henüz yayınlanmamış duyuruyu silmek istediğinize emin misiniz?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">Vazgeç</button>
+                                    <!-- Modal içindeki Sil butonu, formu gönderir -->
+                                    <button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Sil</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            }
+            else
+            {
+                <div class="row g-3 p-2">
+                    <input type="hidden" name="id" value="@Model.ID"/>
+                    <button type="submit" class="btn btn-outline-info" disabled="">Yayınlandı</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

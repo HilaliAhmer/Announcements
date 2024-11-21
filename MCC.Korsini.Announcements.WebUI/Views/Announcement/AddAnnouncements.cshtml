@@ -1,0 +1,64 @@
+﻿@model MCC.Korsini.Announcements.WebUI.ViewModels.AnnouncementAddViewModel
+@{
+    ViewData["Title"] = "Yeni Duyuru Ekle";
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<form asp-action="AddAnnouncements" asp-controller="Announcement" method="post" enctype="multipart/form-data">
+    <h5>Türkçe Duyuru</h5>
+    <!-- Title_TR Alanı -->
+    <div class="mb-3">
+        <label asp-for="Title_TR" class="form-label">Başlık (Türkçe)</label>
+        <input asp-for="Title_TR" class="form-control" aria-describedby="titleHelp">
+        <div id="titleHelp" class="form-text">Duyuru Başlığı</div>
+        <span asp-validation-for="Title_TR" class="text-danger"></span>
+    </div>
+    <!-- TinyMCE’nin textareası -->
+    <!-- Content_TR Alanı -->
+    <div class="mb-3">
+        <label asp-for="Content_TR" class="form-label">İçerik (Türkçe)</label>
+        <textarea asp-for="Content_TR" class="form-control" id="TinyMCETextArea" aria-describedby="contentHelp" enable-tinymce></textarea>
+        <div id="contentHelp" class="form-text">Duyuru İçeriği</div>
+        <span asp-validation-for="Content_TR" class="text-danger"></span>
+    </div>
+    <hr>
+    <h5>English Announcement</h5>
+    <!-- Title_EN Alanı -->
+    <div class="mb-3">
+        <label asp-for="Title_EN" class="form-label">Title (English)</label>
+        <input asp-for="Title_EN" class="form-control" aria-describedby="titleHelp">
+        <div id="titleHelp" class="form-text">Announcement Title</div>
+        <span asp-validation-for="Title_EN" class="text-danger"></span>
+    </div>
+
+    <!-- TinyMCE’nin textareası -->
+    <!-- Content_EN Alanı -->
+    <div class="mb-3">
+        <label asp-for="Content_EN" class="form-label">Content (English)</label>
+        <textarea asp-for="Content_EN" class="form-control" id="TinyMCETextArea" aria-describedby="contentHelp" enable-tinymce></textarea>
+        <div id="contentHelp" class="form-text">Announcement Content</div>
+        <span asp-validation-for="Content_EN" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label">Duyuru Türü</label>
+        <select asp-for="Type" class="form-select" aria-describedby="typeHelp" required>
+            <option value="" selected>Bir tür seçin</option>
+            @foreach (var type in Model.Types)
+            {
+                <option value="@type.Text">@type.Text</option>
+            }
+        </select>
+        <div id="typeHelp" class="form-text">Duyuru türünü girin</div>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+    <!-- Dosya Yükleme Alanı -->
+    <div class="mb-3">
+        <label asp-for="Attachments" class="form-label">Ek Dosyalar</label>
+        <input asp-for="Attachments" class="form-control" type="file" multiple data-val="false">
+    </div>
+    <div class="row g-3 p-2">
+        <button type="submit" class="btn btn-info">Duyuru Oluştur</button>
+    </div>
+</form>

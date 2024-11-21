@@ -1,0 +1,87 @@
+﻿@model MCC.Korsini.Announcements.WebUI.ViewModels.UserGuideUpdateViewModel
+
+@{
+    ViewData["Title"] = "Kılavuzu Düzenle";
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("update-form");
+            const deleteCheckboxes = document.querySelectorAll(".file-delete-checkbox");
+            const newFilesInput = document.querySelector("input[name='NewAttachments']");
+            const errorMessageContainer = document.createElement("div");
+
+            // Hata mesajı konteynerini oluştur
+            errorMessageContainer.className = "alert alert-danger";
+            errorMessageContainer.style.display = "none";
+            form.prepend(errorMessageContainer);
+
+            form.addEventListener("submit", function (e) {
+                const totalFiles = deleteCheckboxes.length; // Mevcut toplam dosya sayısı
+                const checkedFiles = Array.from(deleteCheckboxes).filter(checkbox => checkbox.checked).length; // Silmek için işaretlenen dosyalar
+                const hasNewFiles = newFilesInput.files.length > 0; // Yeni dosya eklenmiş mi?
+
+                // Eğer tüm dosyalar işaretlenmişse ve yeni dosya eklenmemişse hata göster
+                if (checkedFiles === totalFiles && !hasNewFiles) {
+                    e.preventDefault();
+                    errorMessageContainer.innerText = "Tüm dosyaları silmek istiyorsanız, en az bir yeni dosya eklemelisiniz.";
+                    errorMessageContainer.style.display = "block";
+                } else {
+                    // Hata mesajını temizle
+                    errorMessageContainer.style.display = "none";
+                    errorMessageContainer.innerText = "";
+                }
+            });
+
+            // Sil checkbox'larının durumunu dinle ve hata mesajını temizle
+            deleteCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", function () {
+                    const checkedFiles = Array.from(deleteCheckboxes).filter(c => c.checked).length;
+
+                    // Eğer tüm dosyalar işaretlenmemişse hata mesajını temizle
+                    if (checkedFiles < deleteCheckboxes.length) {
+                        errorMessageContainer.style.display = "none";
+                        errorMessageContainer.innerText = "";
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+<h2>Prosedürü Düzenle</h2>
+
+<form id="update-form" asp-action="Update" asp-controller="UserGuides" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ID" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Kılavuz Başlığı</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Mevcut Dosyalar</label>
+        <ul class="list-group">
+            @foreach (var file in Model.ExistingFiles)
+            {
+                <li class="list-group-item">
+                    <input type="checkbox" class="file-delete-checkbox" name="FilesToDelete" value="@file.ID" /> Sil
+                    <a href="~/procedures/@file.FilePath" target="_blank" class="p-2">@file.DisplayName</a>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Yeni Dosyalar</label>
+        <input id="NewAttachments" name="NewAttachments" class="form-control" type="file" multiple />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kılavuzu Güncelle</button>
+</form>
+
+
+
+

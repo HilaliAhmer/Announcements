@@ -1,0 +1,44 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main içerik alanının esnekliğini sağlama */
+main {
+    flex-grow: 1;
+}
+
+/* Footer'ın alt kısımda durması */
+footer {
+    padding: 10px;
+    text-align: center;
+}
+
+.small-slogan {
+    font-size: .6rem
+}
+
+.tox-statusbar__upgrade {
+    display: none !important;
+}
+
+/* "Build with TinyMCE" ibaresini gizle */
+.tox-statusbar__branding {
+    display: none !important;
+}
+
+.navbar a {
+    font-size: 1rem;
+}
+
+.card-body img {
+    max-width: 100%;
+    height: auto; /* Oranı korumak için */
+}
+
+a {
+    color: #62addf;
+    text-decoration: underline;
+}

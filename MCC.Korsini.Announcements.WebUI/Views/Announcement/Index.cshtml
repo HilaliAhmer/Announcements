@@ -1,0 +1,66 @@
+﻿@model MCC.Korsini.Announcements.WebUI.Models.AnnouncementsListViewModel
+@{
+    ViewData["Title"] = "Duyurular";
+}
+@* class="table table-sm table-hover" *@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div id="toolbar" class="d-flex align-items-center">
+                <a class="btn btn-info" role="button" asp-area="" asp-controller="Announcement" asp-action="AddAnnouncements"><i class="bi bi-megaphone"></i></a>
+            </div>
+            <table id="table"
+                   data-toolbar="#toolbar"
+                   class="table table-sm"
+                   data-locale="tr-TR"
+                   data-toggle="table"
+                   data-search="true"
+                   data-pagination="true"
+                   data-sort-order="desc"
+                   data-show-columns="true"
+                   data-custom-sort="customSort"
+                   data-page-size="25">
+                <thead>
+                    <tr>
+                        <th data-field="announcementId">Duyuru Tag</th>
+                        <th data-field="title">Duyuru Başlığı</th>
+                        <th data-field="type">Duyuru Tipi</th>
+                        <th data-field="publishing">Yayınlanma Durumu</th>
+                        <th data-field="createDate">Yayınlanma Tarihi</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var announcement in Model.Announcements)
+                    {
+                        <tr>
+                            <td>@announcement.AnnouncementId</td>
+                            @* <td>@announcement.Title_TR - @announcement.Title_EN</td> *@
+                            <td>@announcement.Title_TR</td>
+                            <td>@announcement.Type</td>
+                            <td>@(announcement.Publishing ? "Yayınlandı" : "Yayınlanmadı")</td>
+                            <td>@announcement.CreateDate</td>
+                            <td>
+                                <a class="nav-link text-info"
+                                   asp-area=""
+                                   asp-controller="Announcement"
+                                   asp-action="Detail"
+                                   asp-route-id="@announcement.ID"
+                                   target="_blank">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#table').removeClass('table-bordered');
+        });
+    </script>
+}

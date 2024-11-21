@@ -1,0 +1,39 @@
+﻿@model List<MCC.Korsini.Announcements.WebUI.Models.UserGuidesListViewModel>
+@{
+    ViewData["Title"] = "Kullanım Kılavuzları";
+}
+
+<a class="btn btn-info mb-3" role="button" asp-area="" asp-controller="UserGuides" asp-action="Create"><i class="bi bi-megaphone"></i> Yeni Kılavuz</a>
+
+<div class="accordion" id="accordionUserGuides">
+    @foreach (var item in Model)
+    {
+        var collapseId = $"collapse{item.ID}";
+        var headerId = $"heading{item.ID}";
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@headerId">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                    @item.Title
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headerId" data-bs-parent="#accordionUserGuides">
+                <div class="accordion-body">
+                    <ul class="list-group list-group-numbered list-group-flush">
+                        @foreach (var file in item.Files)
+                        {
+                            <li class="list-group-item ">
+                                <a href="~/userguides/@file.FilePath" class="p-3" target="_blank">@file.FileName</a>
+                            </li>
+                        }
+                    </ul>
+                    <div class="d-flex justify-content-end mt-2">
+                        <a class="btn btn-warning me-2" asp-controller="UserGuides" asp-action="Update" asp-route-id="@item.ID">Güncelle</a>
+                        <form asp-controller="UserGuides" asp-action="Delete" asp-route-id="@item.ID" method="post" onsubmit="return confirm('Bu prosedürü silmek istediğinize emin misiniz?');">
+                            <button type="submit" class="btn btn-danger">Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

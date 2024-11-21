@@ -1,0 +1,27 @@
+﻿@model MCC.Korsini.Announcements.WebUI.ViewModels.ProcedureAddViewModel
+@{
+    ViewData["Title"] = "Yeni Prosedür Ekle";
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<form asp-action="Create" asp-controller="Procedures" method="post" enctype="multipart/form-data">
+    <h5>Yeni Prosedür Ekle</h5>
+    <!-- Prosedür Title Alanı -->
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Prosedür Başlığı</label>
+        <input asp-for="Title" class="form-control" aria-describedby="titleHelp">
+        <div id="titleHelp" class="form-text">Prosedür Başlığı</div>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <!-- Dosya Yükleme Alanı -->
+    <div class="mb-3">
+        <label asp-for="Attachments" class="form-label">Ek Dosyalar</label>
+        <input asp-for="Attachments" class="form-control" type="file" multiple>
+        <span asp-validation-for="Attachments" class="text-danger"></span>
+    </div>
+    <div class="row g-3 p-2">
+        <button type="submit" class="btn btn-info">Prosedürü Ekle</button>
+    </div>
+</form>
