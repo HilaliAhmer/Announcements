@@ -31,7 +31,6 @@ builder.Services.AddScoped<IOpenAIClient_Service, OpenAIClient_Manager>();
 builder.Services.AddHttpClient<OpenAIClient_Manager>();
 builder.Services.AddControllersWithViews();
 
-
 builder.Services.AddScoped<INotificationCenter_Announcements_Table_Service, NotificationCenter_Announcements_Table_Manager>();
 builder.Services.AddScoped<INotificationCenter_Announcements_Table_Dal, Ef_NotificationCenter_Announcements_Table_Dal>();
 
@@ -93,8 +92,6 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
 builder.Services.AddScoped<ToastHelper>();
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -112,7 +109,10 @@ app.UseRouting();
 app.UseAuthentication(); // Kimlik doðrulamayý aktif et
 app.UseAuthorization();  // Yetkilendirme kontrollerini aktif et
 
-app.UseHangfireDashboard("/hangfire");
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireAuthorizationFilter() } // Admin rolü olan kullanýcýlar eriþebilir
+});
 
 app.MapControllerRoute(
     name: "default",
