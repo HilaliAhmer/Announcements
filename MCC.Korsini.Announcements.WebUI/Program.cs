@@ -14,6 +14,8 @@ using MCC.Korsini.Announcements.Business.Concrete.SummarizeTextConcrete;
 using MCC.Korsini.Announcements.DataAccess.Abstract;
 using MCC.Korsini.Announcements.DataAccess.Concrete.EntityFramework;
 using MCC.Korsini.Announcements.WebUI.Helpers;
+using MCC.Korsini.Announcements.WebUI.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +59,30 @@ builder.Services.AddScoped<INotificationCenter_Procedures_Files_Table_Dal, Ef_No
 builder.Services.AddScoped<INotificationCenter_UserGuides_Files_Table_Service, NotificationCenter_UserGuides_Files_Table_Manager>();
 builder.Services.AddScoped<INotificationCenter_UserGuides_Files_Table_Dal, Ef_NotificationCenter_UserGuides_Files_Table_Dal>();
 
+builder.Services.AddScoped<INotificationCenter_Users_Table_Service, NotificationCenter_Users_Table_Manager>();
+builder.Services.AddScoped<INotificationCenter_Users_Table_Dal, Ef_NotificationCenter_Users_Table_Dal>();
+
+builder.Services.Configure<LdapSettings>(builder.Configuration.GetSection("LdapSettings"));
+builder.Services.AddScoped<LdapAuthenticationService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Giriþ yapmamýþ kullanýcýlarý yönlendirme
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Yetkisiz eriþim
+    });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
+});
+
 builder.Services.AddHangfire(config =>
 {
     config.UseSqlServerStorage(@"Server=10.138.10.66;Database=NotificationCenter;User ID=sa;Password=Trapper35!;TrustServerCertificate=True;Integrated Security=False");
@@ -80,10 +106,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Kimlik doðrulamayý aktif et
+app.UseAuthorization();  // Yetkilendirme kontrollerini aktif et
+
 app.UseHangfireDashboard("/hangfire");
 
 app.MapControllerRoute(

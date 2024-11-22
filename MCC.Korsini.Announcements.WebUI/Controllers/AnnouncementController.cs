@@ -7,6 +7,7 @@ using MCC.Korsini.Announcements.Entities.Concrete;
 using MCC.Korsini.Announcements.WebUI.Helpers;
 using MCC.Korsini.Announcements.WebUI.Models;
 using MCC.Korsini.Announcements.WebUI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -89,7 +90,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> AddAnnouncements()
         {
@@ -111,7 +112,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
 
             return View(viewModel);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddAnnouncements(AnnouncementAddViewModel model)
         {
@@ -200,6 +201,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> PublishAnnouncementEmail(int id)
         {
@@ -237,6 +239,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditAnnouncement(int id)
         {
@@ -282,7 +285,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> EditAnnouncement(AnnouncementEditViewModel model, List<string> FilesToDelete)
         {
@@ -330,7 +333,6 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                     }
                 }
             }
-
             // Yeni dosyaları yükleme ve veritabanına ekleme
             if (model.NewAttachments != null && model.NewAttachments.Any())
             {
@@ -364,6 +366,8 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             _toastHelper.UpdateSuccess();
             return RedirectToAction("Detail", new { id = model.ID });
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteAnnouncement(int id)
         {
@@ -385,12 +389,5 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             
             return RedirectToAction("Index"); // Silme işleminden sonra listeye yönlendirme
         }
-
-        //public async Task<IActionResult> SummarizeAnnouncement(string announcementText)
-        //{
-        //    var summary = await _openAiClientService.SummarizeTextAsync(announcementText);
-        //    ViewBag.Summary = summary;
-        //    return View();
-        //}
     }
 }

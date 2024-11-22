@@ -7,9 +7,11 @@ using MCC.Korsini.Announcements.Entities.Concrete;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Hangfire;
 using MCC.Korsini.Announcements.WebUI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MCC.Korsini.Announcements.WebUI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class PlanScheduledAnnouncementController : Controller
     {
         private readonly INotificationCenter_ScheduledAnnouncements_Table_Service _scheduledAnnouncementsService;
@@ -28,25 +30,25 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             _generateAnnouncementIdService = generateAnnouncementIdService;
             _toastHelper = toastHelper;
         }
-        private async Task<string> GenerateAnnouncementId()
-        {
-            var yearSuffix = DateTime.Now.Year.ToString().Substring(2);
-            var lastAnnouncement = (await _announcementsTableService.GetAllAsync())
-                .OrderByDescending(a => a.ID)
-                .FirstOrDefault();
+        //private async Task<string> GenerateAnnouncementId()
+        //{
+        //    var yearSuffix = DateTime.Now.Year.ToString().Substring(2);
+        //    var lastAnnouncement = (await _announcementsTableService.GetAllAsync())
+        //        .OrderByDescending(a => a.ID)
+        //        .FirstOrDefault();
 
-            int nextId = 1;
-            if (lastAnnouncement != null && lastAnnouncement.AnnouncementId.Length >= 2)
-            {
-                var lastNumberPart = lastAnnouncement.AnnouncementId.Split('-').Last();
-                if (int.TryParse(lastNumberPart, out int lastNumber))
-                {
-                    nextId = lastNumber + 1;
-                }
-            }
+        //    int nextId = 1;
+        //    if (lastAnnouncement != null && lastAnnouncement.AnnouncementId.Length >= 2)
+        //    {
+        //        var lastNumberPart = lastAnnouncement.AnnouncementId.Split('-').Last();
+        //        if (int.TryParse(lastNumberPart, out int lastNumber))
+        //        {
+        //            nextId = lastNumber + 1;
+        //        }
+        //    }
 
-            return $"DYR-IT-{yearSuffix}-{nextId:D2}";
-        }
+        //    return $"DYR-IT-{yearSuffix}-{nextId:D2}";
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Index()

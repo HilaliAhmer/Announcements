@@ -17,25 +17,6 @@
         function submitDeleteForm() {
             document.getElementById('deleteForm').submit();
         }
-
-        function summarizeText() {
-            // Özetlenecek metni al
-            var text = $("#announcementText").text();
-
-            // AJAX isteği ile özetleme talebi gönder
-            $.ajax({
-                url: '@Url.Action("SummarizeText", "Announcement")',
-                type: 'POST',
-                data: { text: text },
-                success: function (response) {
-                    // Yanıttaki özeti özet alanına yazdır
-                    $("#summaryContainer").html("<h4>Özet:</h4><p>" + response.summary + "</p>");
-                },
-                error: function () {
-                    alert("Özet çıkarılamadı. Lütfen tekrar deneyin.");
-                }
-            });
-        }
     </script>
 }
 <div class="container">
@@ -47,7 +28,7 @@
         <div class="card-body">
             <h5 class="card-title">@Model.Title_TR</h5>
             <p class="card-text">@Html.Raw(Model.Content_TR)</p>
-            <hr/>
+            <hr />
             <h5 class="card-title">@Model.Title_EN</h5>
             <p class="card-text">@Html.Raw(Model.Content_EN)</p>
 
@@ -66,47 +47,53 @@
 
             @if (Model.Publishing == false)
             {
-                <form class="row g-3 p-2" asp-action="PublishAnnouncementEmail" asp-controller="Announcement" method="post">
-                    <input type="hidden" name="id" value="@Model.ID"/>
-                    <button type="submit" class="btn btn-info">Yayınla</button>
-                </form>
+                if (User.Identity.IsAuthenticated)
+                {
 
-                <div class="row g-3 p-2">
-                    <a asp-action="EditAnnouncement" asp-controller="Announcement" asp-route-id="@Model.ID" class="btn btn-warning">Düzenle</a>
-                </div>
+                    if (User.IsInRole("Admin"))
+                    {
+                        <form class="row g-3 p-2" asp-action="PublishAnnouncementEmail" asp-controller="Announcement" method="post">
+                            <input type="hidden" name="id" value="@Model.ID" />
+                            <button type="submit" class="btn btn-info">Yayınla</button>
+                        </form>
 
-                <form id="deleteForm" class="row g-3 p-2" asp-action="DeleteAnnouncement" asp-controller="Announcement" method="post">
-                    <input type="hidden" name="id" value="@Model.ID"/>
+                        <div class="row g-3 p-2">
+                            <a asp-action="EditAnnouncement" asp-controller="Announcement" asp-route-id="@Model.ID" class="btn btn-warning">Düzenle</a>
+                        </div>
 
-                    <!-- Ana Sil Düğmesi, modal'i açar -->
-                    <button type="button" class="btn btn-danger" onclick="return showDeleteModal();">Sil</button>
+                        <form id="deleteForm" class="row g-3 p-2" asp-action="DeleteAnnouncement" asp-controller="Announcement" method="post">
+                            <input type="hidden" name="id" value="@Model.ID" />
 
-                    <!-- Modal Yapısı -->
-                    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel">(@Model.AnnouncementId) - @Model.Title_TR Silinsin mi?</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>(@Model.AnnouncementId) - @Model.Title_TR isimli henüz yayınlanmamış duyuruyu silmek istediğinize emin misiniz?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-info" data-bs-dismiss="modal">Vazgeç</button>
-                                    <!-- Modal içindeki Sil butonu, formu gönderir -->
-                                    <button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Sil</button>
+                            <!-- Ana Sil Düğmesi, modal'i açar -->
+                            <button type="button" class="btn btn-danger" onclick="return showDeleteModal();">Sil</button>
+
+                            <!-- Modal Yapısı -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">(@Model.AnnouncementId) - @Model.Title_TR Silinsin mi?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>(@Model.AnnouncementId) - @Model.Title_TR isimli henüz yayınlanmamış duyuruyu silmek istediğinize emin misiniz?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-info" data-bs-dismiss="modal">Vazgeç</button>
+                                            <!-- Modal içindeki Sil butonu, formu gönderir -->
+                                            <button type="button" class="btn btn-danger" onclick="submitDeleteForm()">Sil</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </form>
-
+                        </form>
+                    }
+                }
             }
             else
             {
                 <div class="row g-3 p-2">
-                    <input type="hidden" name="id" value="@Model.ID"/>
+                    <input type="hidden" name="id" value="@Model.ID" />
                     <button type="submit" class="btn btn-outline-info" disabled="">Yayınlandı</button>
                 </div>
             }

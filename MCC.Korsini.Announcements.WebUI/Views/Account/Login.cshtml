@@ -1,0 +1,35 @@
+﻿@model MCC.Korsini.Announcements.WebUI.ViewModels.UserAddViewModel
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<form asp-action="Login" asp-controller="Account" method="post">
+    <h5>Giriş Yap</h5> 
+    <div class="mb-3">
+        <label asp-for="UserName" class="form-label">Kullanıcı Adı (E-posta Adresiniz)</label>
+        <input asp-for="UserName" class="form-control" aria-describedby="UserName">
+        <div id="UserName" class="form-text">Kullanıcı Adı</div>
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Şifreniz</label>
+        <input asp-for="Password" class="form-control" type="password" aria-describedby="Password">
+        <div id="Password" class="form-text">Şifreniz</div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="row g-3 p-2">
+        <button type="submit" class="btn btn-info">Giriş Yap</button>
+    </div>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger mt-3">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}

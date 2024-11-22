@@ -3,6 +3,7 @@ using MCC.Korsini.Announcements.Entities.Concrete;
 using MCC.Korsini.Announcements.WebUI.Helpers;
 using MCC.Korsini.Announcements.WebUI.Models;
 using MCC.Korsini.Announcements.WebUI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +48,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
 
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -118,6 +119,8 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             _toastHelper.CreateSuccess();
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -146,6 +149,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             return View(viewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Update(ProcedureUpdateViewModel model)
         {
@@ -226,6 +230,8 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             _toastHelper.UpdateSuccess();
             return RedirectToAction(nameof(Index));
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
