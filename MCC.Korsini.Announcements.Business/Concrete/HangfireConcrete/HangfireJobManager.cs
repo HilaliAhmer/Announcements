@@ -38,10 +38,10 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
         {
             var htmlContent = $@"
                 <div>
-                    <h5>{announcement.Title_TR}</h5>
+                    <h3>{announcement.Title_TR}</h3>
                     <div>{announcement.Conten_TR}</div>
                     <hr style='margin-top: 20px; margin-bottom: 20px;' />
-                    <h5>{announcement.Title_EN}</h5>
+                    <h3>{announcement.Title_EN}</h3>
                     <div>{announcement.Content_EN}</div>
                     <p><small>{announcement.CreateDate}</small></p>
                 </div>";

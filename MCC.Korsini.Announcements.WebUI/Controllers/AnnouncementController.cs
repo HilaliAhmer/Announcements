@@ -215,10 +215,10 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
 
                 var htmlContent = $@"
                                 <div>
-                                    <h5>{announcementEntity.Title_TR}</h5>
+                                    <h3>{announcementEntity.Title_TR}</h3>
                                     <div>{announcementEntity.Conten_TR}</div>
                                     <hr style='margin-top: 20px; margin-bottom: 20px;' />
-                                    <h5>{announcementEntity.Title_EN}</h5>
+                                    <h3>{announcementEntity.Title_EN}</h3>
                                     <div>{announcementEntity.Content_EN}</div>
                                     <p><small>{announcementEntity.CreateDate}</small></p>
                                 </div>";
