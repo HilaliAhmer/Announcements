@@ -63,7 +63,7 @@
 
         <div class="mb-3" id="scheduledDateContainer" style="display:none;">
             <label asp-for="ScheduledDate" class="form-label">Planlanmış Tarih ve Saat</label>
-            <input asp-for="ScheduledDate" type="datetime-local" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+            <input asp-for="ScheduledDate" type="datetime-local" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
             <span asp-validation-for="ScheduledDate" class="text-danger"></span>
         </div>
 

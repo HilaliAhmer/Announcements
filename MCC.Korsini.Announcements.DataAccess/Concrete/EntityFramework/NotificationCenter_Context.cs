@@ -26,7 +26,7 @@ namespace MCC.Korsini.Announcements.DataAccess.Concrete.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<NotificationCenter_Announcements_Table>()
-                .HasKey(a => a.ID);
+                .HasKey(a => a.ID); 
             modelBuilder.Entity<NotificationCenter_Procedures_Table>()
                 .HasMany(p => p.Files)
                 .WithOne(f => f.Procedure)

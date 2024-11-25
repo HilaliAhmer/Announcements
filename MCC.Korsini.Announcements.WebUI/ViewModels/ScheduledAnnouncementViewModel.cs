@@ -25,8 +25,6 @@ namespace MCC.Korsini.Announcements.WebUI.ViewModels
 
         [Required(ErrorMessage = "Lütfen bir planlama şekli seçiniz.")]
         public string SelectedScheduleType { get; set; }
-
-
         public List<IFormFile> Attachments { get; set; } = new List<IFormFile>();
 
         public List<SelectListItem> ScheduleTypes { get; set; } = new List<SelectListItem>();

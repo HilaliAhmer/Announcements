@@ -1,6 +1,5 @@
 ﻿using MCC.Korsini.Announcements.Business.Abstract;
 using MCC.Korsini.Announcements.Business.Abstract.AnnouncementMailAbstract;
-using MCC.Korsini.Announcements.Business.Abstract.GenerateAnnouncementIdAbstract;
 using MCC.Korsini.Announcements.Business.Abstract.HtmlSanitizerAbstract;
 using MCC.Korsini.Announcements.Business.Abstract.SummarizeTexAbstract;
 using MCC.Korsini.Announcements.Entities.Concrete;
@@ -20,18 +19,16 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
         private readonly IAnnouncementMailService _announcementMailService;
         private readonly INotificationCenter_Announcement_Files_Table_Service _announcementFilesTableService;
         private readonly INotificationCenter_Announcement_Type_Table_Service _announcementTypeTableService;
-        private readonly IGenerateAnnouncementIdService _generateAnnouncementIdService;
         private readonly ToastHelper _toastHelper;
         private readonly IConfiguration _configuration;
         //private readonly IOpenAIClient_Service _openAiClientService;
 
         public AnnouncementController(IHtmlSanitizerService htmlSanitizerService,
-            IAnnouncementMailService announcementMailService, INotificationCenter_Announcements_Table_Service announcementsTableService, INotificationCenter_Announcement_Files_Table_Service announcementFilesTableService, INotificationCenter_Announcement_Type_Table_Service announcementTypeTableService, IOpenAIClient_Service openAiClientService, IGenerateAnnouncementIdService generateAnnouncementIdService, ToastHelper toastHelper, IConfiguration configuration)
+            IAnnouncementMailService announcementMailService, INotificationCenter_Announcements_Table_Service announcementsTableService, INotificationCenter_Announcement_Files_Table_Service announcementFilesTableService, INotificationCenter_Announcement_Type_Table_Service announcementTypeTableService, IOpenAIClient_Service openAiClientService, ToastHelper toastHelper, IConfiguration configuration)
         {
             _announcementsTableService = announcementsTableService;
             _announcementFilesTableService = announcementFilesTableService;
             _announcementTypeTableService = announcementTypeTableService;
-            _generateAnnouncementIdService = generateAnnouncementIdService;
             _toastHelper = toastHelper;
             _configuration = configuration;
             //_openAiClientService = openAiClientService;
@@ -141,19 +138,16 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                 return View(model);
             }
 
-            // Duyuru ID'si için benzersiz bir format oluştur
-            var formattedAnnouncementId = await _generateAnnouncementIdService.GenerateAnnouncementId();
-
             // Yeni duyuru entity'sini oluştur
             var announcement = new NotificationCenter_Announcements_Table
             {
-                AnnouncementId = formattedAnnouncementId,
                 Title_TR = model.Title_TR,
                 Conten_TR = model.Content_TR,
                 Title_EN = model.Title_EN,
                 Content_EN = model.Content_EN,
                 Type = model.Type,
-                CreateDate = model.CreateDate
+                CreateDate = model.CreateDate,
+                AnnouncementYear = DateTime.Now.Year // Burada manuel olarak yıl atanıyor
             };
 
             // Duyuruyu veritabanına kaydedin ve ID'sini alın

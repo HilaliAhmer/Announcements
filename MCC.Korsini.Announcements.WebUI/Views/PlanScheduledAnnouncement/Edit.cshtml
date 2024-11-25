@@ -53,19 +53,9 @@
 
     <div id="scheduledDateContainer" class="mb-3" style="display: @(Model.SelectedScheduleType == "Once" ? "block" : "none")">
         <label asp-for="ScheduledDate" class="form-label">Belirli Tarih</label>
-        <input asp-for="ScheduledDate" class="form-control" type="datetime-local" />
+        <input asp-for="ScheduledDate" class="form-control" type="datetime-local" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
     </div>
-    @* <div class="mb-3">
-        <label asp-for="SelectedScheduleType" class="form-label">Planlama Şekli</label>
-        <select asp-for="SelectedScheduleType" class="form-select" asp-items="Model.ScheduleTypes" id="scheduleType"></select>
-        <span asp-validation-for="SelectedScheduleType" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3" id="scheduledDateContainer" style="display:none;">
-        <label asp-for="ScheduledDate" class="form-label">Planlanmış Tarih ve Saat</label>
-        <input asp-for="ScheduledDate" type="datetime-local" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
-        <span asp-validation-for="ScheduledDate" class="text-danger"></span>
-    </div> *@
+    
     <!-- Mevcut Dosyaları Gösterme ve Silme Seçeneği -->
     @if (Model.ExistingFiles != null && Model.ExistingFiles.Any())
     {

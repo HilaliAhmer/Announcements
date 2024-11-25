@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MCC.Korsini.Announcements.Business.Abstract;
-using MCC.Korsini.Announcements.Business.Abstract.GenerateAnnouncementIdAbstract;
 using MCC.Korsini.Announcements.Business.Abstract.HangfireAbstract;
 using MCC.Korsini.Announcements.WebUI.ViewModels;
 using MCC.Korsini.Announcements.Entities.Concrete;
@@ -18,16 +17,14 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
         private readonly INotificationCenter_ScheduledAnnouncements_Files_Table_Service _scheduledFilesAnnouncementsService;
         private readonly IHangfireJobService _hangfireJobService;
         private readonly INotificationCenter_Announcements_Table_Service _announcementsTableService;
-        private readonly IGenerateAnnouncementIdService _generateAnnouncementIdService;
         private readonly ToastHelper _toastHelper;
 
-        public PlanScheduledAnnouncementController(INotificationCenter_ScheduledAnnouncements_Table_Service scheduledAnnouncementsService, INotificationCenter_ScheduledAnnouncements_Files_Table_Service scheduledFilesAnnouncements, IHangfireJobService hangfireJobService, INotificationCenter_Announcements_Table_Service announcementsTableService, IGenerateAnnouncementIdService generateAnnouncementIdService, ToastHelper toastHelper)
+        public PlanScheduledAnnouncementController(INotificationCenter_ScheduledAnnouncements_Table_Service scheduledAnnouncementsService, INotificationCenter_ScheduledAnnouncements_Files_Table_Service scheduledFilesAnnouncements, IHangfireJobService hangfireJobService, INotificationCenter_Announcements_Table_Service announcementsTableService,  ToastHelper toastHelper)
         {
             _scheduledAnnouncementsService = scheduledAnnouncementsService;
             _scheduledFilesAnnouncementsService = scheduledFilesAnnouncements;
             _hangfireJobService = hangfireJobService;
             _announcementsTableService = announcementsTableService;
-            _generateAnnouncementIdService = generateAnnouncementIdService;
             _toastHelper = toastHelper;
         }
         //private async Task<string> GenerateAnnouncementId()

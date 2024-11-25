@@ -3,10 +3,6 @@ using MCC.Korsini.Announcements.Business.Abstract;
 using MCC.Korsini.Announcements.Business.Abstract.AnnouncementMailAbstract;
 using MCC.Korsini.Announcements.Business.Abstract.HangfireAbstract;
 using MCC.Korsini.Announcements.Entities.Concrete;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MCC.Korsini.Announcements.Business.Abstract.GenerateAnnouncementIdAbstract;
 using Microsoft.Extensions.Configuration;
 
 namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
@@ -18,19 +14,17 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
         private readonly INotificationCenter_ScheduledAnnouncements_Files_Table_Service _scheduledAnnouncementsFilesService;
         private readonly INotificationCenter_Announcements_Table_Service _announcementsTableService;
         private readonly INotificationCenter_Announcement_Files_Table_Service _announcementFilesTableService;
-        private readonly IGenerateAnnouncementIdService _generateAnnouncementIdService;
         private readonly IConfiguration _configuration;
 
         public HangfireJobManager(
             IAnnouncementMailService announcementMailService,
             INotificationCenter_ScheduledAnnouncements_Table_Service scheduledAnnouncementsService,
-            INotificationCenter_ScheduledAnnouncements_Files_Table_Service announcementsFilesService, INotificationCenter_Announcements_Table_Service announcementsTableService, IGenerateAnnouncementIdService generateAnnouncementIdService, INotificationCenter_Announcement_Files_Table_Service announcementFilesTableService, IConfiguration configuration)
+            INotificationCenter_ScheduledAnnouncements_Files_Table_Service announcementsFilesService, INotificationCenter_Announcements_Table_Service announcementsTableService, INotificationCenter_Announcement_Files_Table_Service announcementFilesTableService, IConfiguration configuration)
         {
             _announcementMailService = announcementMailService;
             _scheduledAnnouncementsService = scheduledAnnouncementsService;
             _scheduledAnnouncementsFilesService = announcementsFilesService;
             _announcementsTableService = announcementsTableService;
-            _generateAnnouncementIdService = generateAnnouncementIdService;
             _announcementFilesTableService = announcementFilesTableService;
             _configuration = configuration;
         }
@@ -71,9 +65,9 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
         private DateTime AdjustToNextMondayIfWeekend(DateTime date)
         {
             if (date.DayOfWeek == DayOfWeek.Saturday)
-                return date.AddDays(2); // Cumartesi → Pazartesi
+                return date.AddDays(2); // Cumartesi -> Pazartesi
             if (date.DayOfWeek == DayOfWeek.Sunday)
-                return date.AddDays(1); // Pazar → Pazartesi
+                return date.AddDays(1); // Pazar -> Pazartesi
             return date; // Hafta içindeyse değişiklik yapma
         }
         public void ScheduleAnnouncementWithHangfire(NotificationCenter_ScheduledAnnouncements_Table scheduledAnnouncement)
@@ -126,7 +120,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
             var announcement = await _scheduledAnnouncementsService.GetByIdAsync(announcementId);
             if (announcement != null && announcement.IsActive)
             {
-                var generateLastId = await _generateAnnouncementIdService.GenerateAnnouncementId();
                 var files = await _scheduledAnnouncementsFilesService.GetFilesByAnnouncementIdAsync(announcement.ID);
                 //var announcementFiles = files.Select(f => new NotificationCenter_Announcement_Files_Table
                 //{
@@ -134,7 +127,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                 //}).ToList();
                 var announcementsTable = new NotificationCenter_Announcements_Table
                 {
-                    AnnouncementId = generateLastId,
                     Title_TR = announcement.Title_TR,
                     Conten_TR = announcement.Conten_TR,
                     Title_EN = announcement.Title_EN,
@@ -143,7 +135,8 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     CreatedByUserId = 1,
                     IsVisibleToAll = true,
                     Publishing = true,
-                    Type = announcement.Type
+                    Type = announcement.Type,
+                    AnnouncementYear = DateTime.Now.Year
                 };
                 // 4. Duyuruyu veritabanına ekle ve kaydet
                 await _announcementsTableService.AddAsync(announcementsTable);
@@ -162,7 +155,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     await _announcementFilesTableService.AddAsync(announcementFile);
                 }
 
-                await SendEmail(announcement, generateLastId);
+                await SendEmail(announcement, announcementsTable.AnnouncementId);
                 announcement.IsActive = false; // Tek seferlik olduğu için pasif hale getir
                 await _scheduledAnnouncementsService.UpdateAsync(announcement);
             }
@@ -173,7 +166,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
             var announcement = await _scheduledAnnouncementsService.GetByIdAsync(announcementId);
             if (announcement != null && announcement.IsActive)
             {
-                var generateLastId = await _generateAnnouncementIdService.GenerateAnnouncementId();
                 var files = await _scheduledAnnouncementsFilesService.GetFilesByAnnouncementIdAsync(announcement.ID);
                 //var announcementFiles = files.Select(f => new NotificationCenter_Announcement_Files_Table
                 //{
@@ -181,7 +173,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                 //}).ToList();
                 var announcementsTable = new NotificationCenter_Announcements_Table
                 {
-                    AnnouncementId = generateLastId,
                     Title_TR = announcement.Title_TR,
                     Conten_TR = announcement.Conten_TR,
                     Title_EN = announcement.Title_EN,
@@ -190,7 +181,8 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     CreatedByUserId = 1,
                     IsVisibleToAll = true,
                     Publishing = true,
-                    Type = announcement.Type
+                    Type = announcement.Type,
+                    AnnouncementYear = DateTime.Now.Year
                 };
                 // 4. Duyuruyu veritabanına ekle ve kaydet
                 await _announcementsTableService.AddAsync(announcementsTable);
@@ -209,7 +201,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     await _announcementFilesTableService.AddAsync(announcementFile);
                 }
 
-                await SendEmail(announcement, generateLastId);
+                await SendEmail(announcement, announcementsTable.AnnouncementId);
                 announcement.NextRunTime = CalculateFirstMondayOfNextMonth();
                 await _scheduledAnnouncementsService.UpdateAsync(announcement);
             }
@@ -220,7 +212,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
             var announcement = await _scheduledAnnouncementsService.GetByIdAsync(announcementId);
             if (announcement != null && announcement.IsActive)
             {
-                var generateLastId = await _generateAnnouncementIdService.GenerateAnnouncementId();
                 var files = await _scheduledAnnouncementsFilesService.GetFilesByAnnouncementIdAsync(announcement.ID);
                 //var announcementFiles = files.Select(f => new NotificationCenter_Announcement_Files_Table
                 //{
@@ -228,7 +219,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                 //}).ToList();
                 var announcementsTable = new NotificationCenter_Announcements_Table
                 {
-                    AnnouncementId = generateLastId,
                     Title_TR = announcement.Title_TR,
                     Conten_TR = announcement.Conten_TR,
                     Title_EN = announcement.Title_EN,
@@ -237,7 +227,8 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     CreatedByUserId = 1,
                     IsVisibleToAll = true,
                     Publishing = true,
-                    Type = announcement.Type
+                    Type = announcement.Type,
+                    AnnouncementYear = DateTime.Now.Year
                 };
                 // 4. Duyuruyu veritabanına ekle ve kaydet
                 await _announcementsTableService.AddAsync(announcementsTable);
@@ -256,7 +247,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     await _announcementFilesTableService.AddAsync(announcementFile);
                 }
 
-                await SendEmail(announcement, generateLastId);
+                await SendEmail(announcement, announcementsTable.AnnouncementId);
                 announcement.NextRunTime = AdjustToNextMondayIfWeekend(
                     new DateTime(announcement.NextRunTime.Value.Year, announcement.NextRunTime.Value.Month, 15).AddMonths(1)
                 );
@@ -269,7 +260,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
             var announcement = await _scheduledAnnouncementsService.GetByIdAsync(announcementId);
             if (announcement != null && announcement.IsActive)
             {
-                var generateLastId = await _generateAnnouncementIdService.GenerateAnnouncementId();
                 var files = await _scheduledAnnouncementsFilesService.GetFilesByAnnouncementIdAsync(announcement.ID);
                 //var announcementFiles = files.Select(f => new NotificationCenter_Announcement_Files_Table
                 //{
@@ -277,7 +267,6 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                 //}).ToList();
                 var announcementsTable = new NotificationCenter_Announcements_Table
                 {
-                    AnnouncementId = generateLastId,
                     Title_TR = announcement.Title_TR,
                     Conten_TR = announcement.Conten_TR,
                     Title_EN = announcement.Title_EN,
@@ -286,7 +275,8 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     CreatedByUserId = 1,
                     IsVisibleToAll = true,
                     Publishing = true,
-                    Type = announcement.Type
+                    Type = announcement.Type,
+                    AnnouncementYear = DateTime.Now.Year
                 };
                 // 4. Duyuruyu veritabanına ekle ve kaydet
                 await _announcementsTableService.AddAsync(announcementsTable);
@@ -305,7 +295,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     await _announcementFilesTableService.AddAsync(announcementFile);
                 }
 
-                await SendEmail(announcement, generateLastId);
+                await SendEmail(announcement, announcementsTable.AnnouncementId);
                 announcement.NextRunTime = announcement.NextRunTime?.AddDays(7).Date.AddHours(10).AddMinutes(30);
                 await _scheduledAnnouncementsService.UpdateAsync(announcement);
             }
