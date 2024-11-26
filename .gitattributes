@@ -61,3 +61,11 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+# JavaScript kütüphane dosyalarını dil analizi dışında bırak
+/wwwroot/js/* linguist-vendored
+/node_modules/* linguist-vendored
+/wwwroot/lib/* linguist-vendored
+
+# SCSS veya CSS kütüphane dosyalarını dil analizi dışında bırak
+/wwwroot/css/* linguist-vendored
+/wwwroot/lib/bootstrap/* linguist-vendored
