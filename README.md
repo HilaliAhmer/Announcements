@@ -1,12 +1,12 @@
 # Announcements - ASP.NET Core MVC Project
 
-## 📖 Project Overview
+## 📖 Proje Tanıtımı
 
 **Announcements**, kurum içi duyuruların yönetimi için geliştirilmiş bir ASP.NET Core MVC projesidir. Bu platform, IT ekipleri ve diğer kullanıcılar arasındaki iletişimi kolaylaştırmak için kesintiler, planlı çalışmalar, prosedürlere ve kullanıcı kılavuzlarına hızlı erişim sağlayacak bir duyuru sistemi sunar. Kullanıcılar duyuruları e-posta yoluyla alabilir ve duyurular belirli günlerde planlanabilir.
 
 ## 🛠️ Architecture and Technology Stack
 
-### Architecture
+### Mimari Tasarım
 
 Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 
@@ -16,7 +16,7 @@ Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 - **Entities Layer:** Varlık sınıflarının tanımlandığı katman.
 - **Web UI Layer:** Kullanıcı arayüzünü sağlayan katman.
 
-### Technology Stack
+### Kullanılan Teknolojiler
 
 - **Backend:** ASP.NET Core MVC 8.0
 - **Frontend:**
@@ -28,9 +28,9 @@ Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 - **Database:** SQL Server
 - **ORM:** Entity Framework Core 8.0.0
 
-## 🖥️ Installation and Setup
+## 🖥️ Kurulum ve Ayarlama
 
-### Prerequisites
+### Ön Koşullar
 
 Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan emin olun:
 
@@ -38,7 +38,7 @@ Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan e
 - **Visual Studio 2022** (ya da ASP.NET Core MVC destekleyen başka bir IDE)
 - **SQL Server**
 
-### Installation Steps
+### Kurulum Adımları
 
 1. **Depoyu Klonlayın**  
 Depoyu yerel makinenize klonlayın:
