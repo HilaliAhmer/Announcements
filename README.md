@@ -42,8 +42,9 @@ Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan e
 
 1. **Depoyu Klonlayın**  
 Depoyu yerel makinenize klonlayın:
-###bash
+```bash
 git clone https://github.com/HilaliAhmer/Announcements.git
+```
 
 2. **Projeyi Açın**  
 Visual Studio 2022 veya Visual Studio Code kullanarak projeyi açın.
@@ -56,18 +57,21 @@ NuGet bağımlılıklarını yükleyin:
 4. **Veritabanını Yapılandırın**  
    - `appsettings.json` dosyasını açarak veritabanı bağlantı ayarlarını yapılandırın.
    - Aşağıdaki komutu kullanarak migration işlemini çalıştırın:
-###bash
+```bash
 dotnet ef database update
+```
 
 5. **Uygulamayı Çalıştırın**  
 Projeyi çalıştırmak için şu komutu kullanın:
-###bash
+```bash
 dotnet run
+```
 
 6. **Web Tarayıcınızdan Erişim Sağlayın**  
 Aşağıdaki URL'yi ziyaret ederek uygulamayı çalıştırabilirsiniz:
-###bash
+```bash
 http://localhost:5000
+```
 
 ## 🤝 Katkıda Bulunmak
 
