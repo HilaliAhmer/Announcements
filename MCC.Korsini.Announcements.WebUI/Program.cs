@@ -70,8 +70,8 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Giriþ yapmamýþ kullanýcýlarý yönlendirme
-        options.AccessDeniedPath = "/Account/AccessDenied"; // Yetkisiz eriþim
+        options.LoginPath = "/Account/Login"; // GiriÃ¾ yapmamÃ½Ã¾ kullanÃ½cÃ½larÃ½ yÃ¶nlendirme
+        options.AccessDeniedPath = "/Account/AccessDenied"; // Yetkisiz eriÃ¾im
     });
 builder.Services.AddAuthorization(options =>
 {
@@ -81,7 +81,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddHangfire(config =>
 {
-    config.UseSqlServerStorage(@"Server=10.138.10.66;Database=NotificationCenter;User ID=sa;Password=Trapper35!;TrustServerCertificate=True;Integrated Security=False");
+    // Hangfire Servisi iÃ§in Database BaÄŸlantÄ±sÄ±
+    config.UseSqlServerStorage(@"Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;TrustServerCertificate=True;Integrated Security=False");
 });
 builder.Services.AddHangfireServer();
 builder.Services.AddScoped<IHangfireJobService, HangfireJobManager>();
@@ -103,12 +104,12 @@ app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();
 
-app.UseAuthentication(); // Kimlik doðrulamayý aktif et
+app.UseAuthentication(); // Kimlik doÃ°rulamayÃ½ aktif et
 app.UseAuthorization();  // Yetkilendirme kontrollerini aktif et
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    Authorization = new[] { new HangfireAuthorizationFilter() } // Admin rolü olan kullanýcýlar eriþebilir
+    Authorization = new[] { new HangfireAuthorizationFilter() } // Admin rolÃ¼ olan kullanÃ½cÃ½lar eriÃ¾ebilir
 });
 
 app.MapControllerRoute(
