@@ -1,48 +1,78 @@
 # Announcements - ASP.NET Core MVC Project
 
-## 📚 Project Overview
-**Announcements** is a web-based announcement management platform designed to streamline the process of creating, scheduling, and distributing announcements within an organization. It features a user-friendly interface and role-based access control to ensure security and functionality.
+## 📖 Project Overview
 
----
+**Announcements**, kurum içi duyuruların yönetimi için geliştirilmiş bir ASP.NET Core MVC projesidir. Bu platform, IT ekipleri ve diğer kullanıcılar arasındaki iletişimi kolaylaştırmak için kesintiler, planlı çalışmalar, prosedürlere ve kullanıcı kılavuzlarına hızlı erişim sağlayacak bir duyuru sistemi sunar. Kullanıcılar duyuruları e-posta yoluyla alabilir ve duyurular belirli günlerde planlanabilir.
 
-## 🛠 Architecture and Technology Stack
+## 🛠️ Architecture and Technology Stack
 
 ### Architecture
-The project is built using a layered architecture:
-- **Business Layer**: Contains the core business logic.
-- **Core Layer**: Provides shared utilities and configurations.
-- **Data Access Layer**: Handles database operations using Entity Framework Core.
-- **Entities Layer**: Defines the data models.
-- **Web UI Layer**: The presentation layer for users.
+
+Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
+
+- **Business Layer:** İş mantığı katmanı.
+- **Core Layer:** Ortak bileşenler ve yapıların bulunduğu katman.
+- **DataAccess Layer:** Veri erişim işlemlerini yöneten katman.
+- **Entities Layer:** Varlık sınıflarının tanımlandığı katman.
+- **Web UI Layer:** Kullanıcı arayüzünü sağlayan katman.
 
 ### Technology Stack
-- **Backend**: ASP.NET Core MVC 8.0
-- **Frontend**:
-  - Bootstrap 5.3.0
-  - jQuery 3.6.4
-  - FontAwesome 6.0.0
-  - bootstrap-table 1.23.5
-  - bootstrap-icons 1.11.3
-- **Database**: SQL Server
-- **ORM**: Entity Framework Core 7.0.0
 
----
+- **Backend:** ASP.NET Core MVC 8.0
+- **Frontend:**
+  - Bootstrap 5.3.x
+  - jQuery 3.6.x
+  - FontAwesome 6.x
+  - SCSS 1.62.x
+  - CSS (Bootstrap ile entegre)
+- **Database:** SQL Server
+- **ORM:** Entity Framework Core 8.0.0
 
-## 📦 Installation and Setup
+## 🖥️ Installation and Setup
 
 ### Prerequisites
-Ensure you have the following installed:
-- **.NET SDK 8.0 or later**
-- **Visual Studio 2022** (or another IDE supporting ASP.NET Core MVC)
+
+Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan emin olun:
+
+- **.NET SDK 8.0** veya daha üstü
+- **Visual Studio 2022** (ya da ASP.NET Core MVC destekleyen başka bir IDE)
 - **SQL Server**
 
 ### Installation Steps
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/HilaliAhmer/Announcements.git
-   cd Announcements
-2. Update the `ConnectionStrings` section with your SQL Server details:
-   ```json
-   "ConnectionStrings": {
-     "DefaultConnection": "Server=YOUR_SERVER;Database=AnnouncementsDB;Trusted_Connection=True;"
-   }
+
+1. **Depoyu Klonlayın**  
+Depoyu yerel makinenize klonlayın:
+```bash
+git clone https://github.com/HilaliAhmer/Announcements.git
+```
+
+2. **Projeyi Açın**  
+Visual Studio 2022 veya Visual Studio Code kullanarak projeyi açın.
+
+3. **Gerekli Bağımlılıkları Yükleyin**  
+NuGet bağımlılıklarını yükleyin:
+   - Visual Studio'da `Tools > NuGet Package Manager > Manage NuGet Packages for Solution` yolunu izleyin.
+   - Tüm bağımlılıkların yüklendiğinden emin olun.
+
+4. **Veritabanını Yapılandırın**  
+   - `appsettings.json` dosyasını açarak veritabanı bağlantı ayarlarını yapılandırın.
+   - Aşağıdaki komutu kullanarak migration işlemini çalıştırın:
+```bash
+dotnet ef database update
+```
+
+5. **Uygulamayı Çalıştırın**  
+Projeyi çalıştırmak için şu komutu kullanın:
+```bash
+dotnet run
+```
+
+6. **Web Tarayıcınızdan Erişim Sağlayın**  
+Aşağıdaki URL'yi ziyaret ederek uygulamayı çalıştırabilirsiniz:
+```bash
+http://localhost:5000
+```
+
+## 📄 License
+
+Bu proje, [MIT Lisansı](LICENSE) altında lisanslanmıştır.
