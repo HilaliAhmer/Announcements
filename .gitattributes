@@ -61,9 +61,3 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
-
-# Frontend dosyalarını dil analizi dışında bırak
-wwwroot/js/* linguist-vendored
-wwwroot/css/* linguist-vendored
-node_modules/* linguist-vendored
-wwwroot/lib/* linguist-vendored
