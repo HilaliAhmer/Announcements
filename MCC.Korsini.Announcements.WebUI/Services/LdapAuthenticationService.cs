@@ -29,7 +29,7 @@ public class LdapAuthenticationService
         catch (LdapException ex)
         {
             Console.WriteLine($"LDAP connection error: {ex.Message}");
-            throw new Exception("Unable to connect to LDAP server. Check the configuration and credentials.");
+            throw new Exception("Unable to connect to LDAP server. Check the configuration and credentials.", ex);
         }
     }
 
@@ -39,7 +39,6 @@ public class LdapAuthenticationService
         {
             using var connection = CreateConnection();
 
-            // Kullanıcıyı email ile arayın
             var searchFilter = $"(mail={email})";
             Console.WriteLine($"Searching for user with filter: {searchFilter}");
             var searchResults = connection.Search(
@@ -60,7 +59,6 @@ public class LdapAuthenticationService
             var userDn = userEntry.Dn;
             Console.WriteLine($"Found user DN: {userDn}");
 
-            // Kullanıcı doğrulaması için bind işlemi
             using var userConnection = new LdapConnection { SecureSocketLayer = false };
             userConnection.Connect(_ldapSettings.Server, _ldapSettings.Port);
 
@@ -83,7 +81,6 @@ public class LdapAuthenticationService
         {
             using var connection = CreateConnection();
 
-            // Kullanıcıyı email ile arayın
             var searchFilter = $"(mail={email})";
             Console.WriteLine($"Searching for user with filter: {searchFilter}");
             var searchResults = connection.Search(
@@ -103,7 +100,6 @@ public class LdapAuthenticationService
             var userEntry = searchResults.Next();
             var groups = userEntry.GetAttribute("memberOf")?.StringValueArray ?? Array.Empty<string>();
 
-            // Kullanıcının belirtilen grupta olup olmadığını kontrol et
             Console.WriteLine($"Checking if user belongs to group: {_ldapSettings.DistinguishedGroupName}");
             return groups.Any(g => string.Equals(g, _ldapSettings.DistinguishedGroupName, StringComparison.OrdinalIgnoreCase));
         }
@@ -111,6 +107,50 @@ public class LdapAuthenticationService
         {
             Console.WriteLine($"LDAP group membership check error: {ex.Message}");
             return false;
+        }
+    }
+
+    public Dictionary<string, string> GetUserAttributes(string email)
+    {
+        try
+        {
+            using var connection = CreateConnection();
+
+            var searchFilter = $"(mail={email})";
+            Console.WriteLine($"Searching for user with filter: {searchFilter}");
+            var searchResults = connection.Search(
+                _ldapSettings.BaseDN,
+                LdapConnection.ScopeSub,
+                searchFilter,
+                new[] { "mail", "cn", "sn", "givenName", "department", "title" },
+                false
+            );
+
+            if (!searchResults.HasMore())
+            {
+                Console.WriteLine("User not found in LDAP.");
+                return null;
+            }
+
+            var userEntry = searchResults.Next();
+
+            var attributes = new Dictionary<string, string>
+            {
+                { "mail", userEntry.GetAttribute("mail")?.StringValue },
+                { "cn", userEntry.GetAttribute("cn")?.StringValue },
+                { "sn", userEntry.GetAttribute("sn")?.StringValue },
+                { "givenName", userEntry.GetAttribute("givenName")?.StringValue },
+                { "department", userEntry.GetAttribute("department")?.StringValue },
+                { "title", userEntry.GetAttribute("title")?.StringValue }
+            };
+
+            Console.WriteLine($"User attributes retrieved: {string.Join(", ", attributes.Select(a => $"{a.Key}: {a.Value}"))}");
+            return attributes;
+        }
+        catch (LdapException ex)
+        {
+            Console.WriteLine($"LDAP attribute fetch error: {ex.Message}");
+            return null;
         }
     }
 }

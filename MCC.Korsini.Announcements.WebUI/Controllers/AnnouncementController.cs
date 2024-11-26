@@ -9,6 +9,7 @@ using MCC.Korsini.Announcements.WebUI.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 
 namespace MCC.Korsini.Announcements.WebUI.Controllers
 {
@@ -138,6 +139,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                 return View(model);
             }
 
+            var userId = User.FindFirst("UserId")?.Value; // Kullanıcı ID'sini al
             // Yeni duyuru entity'sini oluştur
             var announcement = new NotificationCenter_Announcements_Table
             {
@@ -147,6 +149,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                 Content_EN = model.Content_EN,
                 Type = model.Type,
                 CreateDate = model.CreateDate,
+                CreatedByUserId = string.IsNullOrEmpty(userId)?10:int.Parse(userId),
                 AnnouncementYear = DateTime.Now.Year // Burada manuel olarak yıl atanıyor
             };
 

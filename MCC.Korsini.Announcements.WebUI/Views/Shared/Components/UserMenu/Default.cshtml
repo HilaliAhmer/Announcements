@@ -1,0 +1,75 @@
+﻿@model MCC.Korsini.Announcements.WebUI.ViewModels.UserMenuViewModel
+
+@if (Model.IsAuthenticated)
+{
+    <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+        <ui class="nav-item dropdown dropdown-center">
+            <a class="nav-link dropdown-toggle text-dark" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: .8rem;">
+                <strong>@Model.FullName</strong>
+                <i class="bi bi-person-circle"></i>
+            </a>
+            <ul class="dropdown-menu">
+
+                <li><span class="dropdown-item-text"><strong>@Model.FullName</strong> - (<strong>@Model.Role</strong>) - <strong> @User.FindFirst("UserId")?.Value</strong></span></li>
+                <li><span class="dropdown-item-text">@Model.Title</span></li>
+                <li><span class="dropdown-item-text">@Model.Email</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="text-dark btn nav-link">
+                            <i class="bi bi-box-arrow-in-left"></i> Çıkış Yap
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </ui>
+    </div>
+}
+else
+{
+    <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+        <form asp-controller="Account" asp-action="Login" method="get">
+            <button type="submit" class="text-dark btn nav-link">
+                <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+            </button>
+        </form>
+    </div>
+}
+
+
+
+
+@* <div class="d-lg-flex col-lg-3 justify-content-lg-end">
+    <ui class="nav-item dropdown dropdown-center">
+        <a class="nav-link dropdown-toggle text-dark" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: .8rem;">
+            <strong>@Model.FullName</strong>
+            <i class="bi bi-person-circle"></i>
+        </a>
+        <ul class="dropdown-menu">
+            @if (Model.IsAuthenticated)
+            {
+                <li><span class="dropdown-item-text"><strong>@Model.FullName</strong></span></li>
+                <li><span class="dropdown-item-text">@Model.Title</span></li>
+                <li><span class="dropdown-item-text">@Model.Email</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="text-dark btn nav-link">
+                            <i class="bi bi-box-arrow-in-left"></i> Çıkış Yap
+                        </button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="dropdown-item">
+                    <form asp-controller="Account" asp-action="Login" method="get">
+                        <button type="submit" class="text-dark btn nav-link">
+                            <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                        </button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </ui>
+</div> *@

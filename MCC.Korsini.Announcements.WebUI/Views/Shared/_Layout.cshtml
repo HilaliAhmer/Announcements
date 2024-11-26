@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="~/img/favicon.ico">
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap-table/bootstrap-table.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/AnnouncementSite.css" />
 </head>
@@ -47,34 +47,7 @@
                                 }
                             }
                         </ul>
-                        <div class="d-lg-flex col-lg-3 justify-content-lg-end">
-                            <ui class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: .8rem;">@User.Identity.Name <i class="bi bi-person-circle"></i></a>
-                                <ul class="dropdown-menu">
-                                    @if (User.Identity.IsAuthenticated)
-                                    {
-                                        <li class="dropdown-item">
-                                            <form asp-controller="Account" asp-action="Logout" method="post">
-                                                <button type="submit" class="text-dark btn nav-link">
-                                                    <i class="bi bi-box-arrow-in-left"></i> Çıkış Yap
-                                                </button>
-                                            </form>
-                                        </li>
-
-                                    }
-                                    else
-                                    {
-                                        <li class="dropdown-item">
-                                            <form asp-controller="Account" asp-action="Login" method="get">
-                                                <button type="submit" class="text-dark btn nav-link">
-                                                    <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
-                                                </button>
-                                            </form>
-                                        </li>
-                                    }
-                                </ul>
-                            </ui>
-                        </div>
+                        @await Component.InvokeAsync("UserMenu")
                     </div>
                 </div>
             </nav>
@@ -114,15 +87,14 @@
     </footer>
 
     <!-- jQuery Kütüphanesi -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <!-- Bootstrap Bundle (Hem Bootstrap hem de Popper içeren sürüm) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap Table -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/bootstrap-table.min.js"></script>
+    <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
     <!-- Bootstrap Table Türkçe Dil Paketi -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/locale/bootstrap-table-tr-TR.min.js"></script>
+    <script src="~/lib/bootstrap-table/locale/bootstrap-table-tr-TR.min.js"></script>
     <script src="~/js/announcementsitejs.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
