@@ -375,3 +375,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MCC.Korsini.Announcements.WebUI/wwwroot
+/MCC.Korsini.Announcements.DataAccess/Concrete/EntityFramework/NotificationCenter_Context.cs
+/MCC.Korsini.Announcements.WebUI/Program.cs
+/MCC.Korsini.Announcements.WebUI/appsettings.json
+/MCC.Korsini.Announcements.WebUI/wwwroot/procedures/test.pdf
+/MCC.Korsini.Announcements.WebUI/wwwroot/uploads/test.pdf
+/MCC.Korsini.Announcements.WebUI/wwwroot/userguides/test.pdf
