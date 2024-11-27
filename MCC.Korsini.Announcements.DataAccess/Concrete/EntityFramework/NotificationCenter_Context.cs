@@ -9,7 +9,7 @@ namespace MCC.Korsini.Announcements.DataAccess.Concrete.EntityFramework
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=10.138.10.66;Database=NotificationCenter;User ID=sa;Password=Trapper35!;TrustServerCertificate=True;Integrated Security=False");
+                @"Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;TrustServerCertificate=True;Integrated Security=False");
         }
 
         public DbSet<NotificationCenter_Announcements_Table> NotificationCenter_Announcements_Table { get; set; }
