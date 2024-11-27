@@ -3,6 +3,19 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# wwwroot/uploads altındaki her şeyi dışla
+wwwroot/uploads/**
+wwwroot/procedures/**
+wwwroot/userguides/**
+
+# appsettings.json dosyasını dışla
+appsettings.json
+appsettings.*.json
+
+# NotificationCenter_Context dosyasını dışla
+MCC.Korsini.Announcements.DataAccess.Concrete.EntityFramework/NotificationCenter_Context.cs
+
+
 # User-specific files
 *.rsuser
 *.suo
