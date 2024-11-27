@@ -1,12 +1,12 @@
 # Announcements - ASP.NET Core MVC Project
 
-## 📖 Project Overview
+## 📖 Proje Genel Bakış
 
 **Announcements**, kurum içi duyuruların yönetimi için geliştirilmiş bir ASP.NET Core MVC projesidir. Bu platform, IT ekipleri ve diğer kullanıcılar arasındaki iletişimi kolaylaştırmak için kesintiler, planlı çalışmalar, prosedürlere ve kullanıcı kılavuzlarına hızlı erişim sağlayacak bir duyuru sistemi sunar. Kullanıcılar duyuruları e-posta yoluyla alabilir ve duyurular belirli günlerde planlanabilir.
 
 ## 🛠️ Architecture and Technology Stack
 
-### Architecture
+### Mimari Tasarım
 
 Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 
@@ -16,7 +16,7 @@ Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 - **Entities Layer:** Varlık sınıflarının tanımlandığı katman.
 - **Web UI Layer:** Kullanıcı arayüzünü sağlayan katman.
 
-### Technology Stack
+### Kullanılan Teknolojiler
 
 - **Backend:** ASP.NET Core MVC 8.0
 - **Frontend:**
@@ -28,9 +28,9 @@ Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 - **Database:** SQL Server
 - **ORM:** Entity Framework Core 8.0.0
 
-## 🖥️ Installation and Setup
+## 🖥️ Kurulum ve Ayarlama
 
-### Prerequisites
+### Ön Koşullar
 
 Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan emin olun:
 
@@ -38,12 +38,13 @@ Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan e
 - **Visual Studio 2022** (ya da ASP.NET Core MVC destekleyen başka bir IDE)
 - **SQL Server**
 
-### Installation Steps
+### Kurulum Aşamaları
 
 1. **Depoyu Klonlayın**  
 Depoyu yerel makinenize klonlayın:
-###bash
+```bash
 git clone https://github.com/HilaliAhmer/Announcements.git
+```
 
 2. **Projeyi Açın**  
 Visual Studio 2022 veya Visual Studio Code kullanarak projeyi açın.
@@ -56,20 +57,23 @@ NuGet bağımlılıklarını yükleyin:
 4. **Veritabanını Yapılandırın**  
    - `appsettings.json` dosyasını açarak veritabanı bağlantı ayarlarını yapılandırın.
    - Aşağıdaki komutu kullanarak migration işlemini çalıştırın:
-###bash
+```bash
 dotnet ef database update
+```
 
 5. **Uygulamayı Çalıştırın**  
 Projeyi çalıştırmak için şu komutu kullanın:
-###bash
+```bash
 dotnet run
+```
 
 6. **Web Tarayıcınızdan Erişim Sağlayın**  
 Aşağıdaki URL'yi ziyaret ederek uygulamayı çalıştırabilirsiniz:
-###bash
+```bash
 http://localhost:5000
+```
 
-## 🤝 Contribution
+## 🤝 Katkıda Bulunmak
 
 Projeye katkıda bulunmak için aşağıdaki adımları takip edebilirsiniz:
 
@@ -77,6 +81,6 @@ Projeye katkıda bulunmak için aşağıdaki adımları takip edebilirsiniz:
 2. Yeni bir özellik geliştirin veya bir hata düzeltin.
 3. Pull request göndererek değişikliklerinizi paylaşın.
 
-## 📄 License
+## 📄 Lisans
 
 Bu proje, [MIT Lisansı](LICENSE) altında lisanslanmıştır.
