@@ -81,6 +81,6 @@ You can follow the steps below to contribute to the project:
 2. Develop a new feature or fix a bug.
 3. Share your changes by sending a pull request.
 
-## 📄 Licance
+## 📄 License
 
 This project is licensed under the [MIT Lisansı](LICENSE).
