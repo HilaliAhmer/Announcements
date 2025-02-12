@@ -83,4 +83,4 @@ You can follow the steps below to contribute to the project:
 
 ## 📄 License
 
-This project is licensed under the [MIT Lisansı](LICENSE).
+This project is licensed under the [MIT Licence](LICENSE.txt).
