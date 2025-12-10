@@ -8,12 +8,13 @@ namespace MCC.Korsini.Announcements.Business.Concrete.AnnouncementMailConcrete
     {
         private readonly SmtpClient _smtpClient;
         private readonly string _senderEmail;
+        private readonly string _senderDisplayName;
 
         public AnnouncementMailManager(IConfiguration configuration)
         {
             var smtpSettings = configuration.GetSection("SmtpSettings");
             _senderEmail = smtpSettings["SenderEmail"];
-
+            _senderDisplayName = smtpSettings["SenderDisplayName"];
             _smtpClient = new SmtpClient(smtpSettings["Server"])
             {
                 Port = int.Parse(smtpSettings["Port"]),
@@ -24,7 +25,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.AnnouncementMailConcrete
         {
             using (var mailMessage = new MailMessage())
             {
-                mailMessage.From = new MailAddress(_senderEmail);
+                mailMessage.From = new MailAddress(_senderEmail, _senderDisplayName);
                 mailMessage.To.Add(recipientEmail);
                 mailMessage.Subject = subject;
                 mailMessage.Body = htmlContent;

@@ -1,4 +1,4 @@
-html {
+﻿html {
     font-size: 14px;
 }
 
@@ -8,7 +8,11 @@ html {
     }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -20,4 +24,277 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+/* ============================
+   ORG CHART GENEL AYARLAR
+   ============================ */
+
+/* Ana chart alanı */
+#chartArea {
+    width: 100%;
+    overflow: auto;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 30px 20px 40px;
+}
+
+/* Genel Müdür görünümü: dikeyde ortalı */
+.chart-overview {
+    align-items: center;
+}
+
+/* Departman görünümü: yukarıdan başlasın */
+.chart-departments {
+    align-items: flex-start;
+    padding-top: 40px;
+}
+
+/* Tek bir org-chart tanımı */
+.org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 24px 10px 24px;
+    margin: 0;
+}
+
+/* Her seviye (GM seviyesi / alt seviye) */
+.org-level {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Genel node stili */
+.org-node {
+    position: relative;
+    min-width: 200px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+    cursor: pointer;
+}
+
+/* Genel müdür / departman yöneticisi kutusu */
+.org-node-gm {
+    min-width: 260px;
+    cursor: default;
+}
+
+/* İsim / title / departman metinleri */
+.org-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.org-title {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+.org-dept {
+    font-size: 0.78rem;
+    color: #9ca3af;
+}
+
+/* Aranan/odaklanan kişi vurgusu */
+.org-node.selected {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.3);
+}
+
+/* GM'den alt seviyeye dik çizgi */
+.org-connector.gm-to-managers {
+    width: 2px;
+    height: 20px;
+    background: #d1d5db;
+}
+
+/* Alt seviye satırının üstündeki yatay çizgi */
+.manager-row-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+}
+
+    .manager-row-wrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 5%;
+        right: 5%;
+        height: 2px;
+        background: #d1d5db;
+    }
+
+/* Alt seviye node’ları (müdürler / çalışanlar) */
+.org-level-managers {
+    margin-top: 12px;
+}
+
+    /* Yatay çizgiden kutulara dik çizgi */
+    .org-level-managers .org-node::before {
+        content: "";
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 12px;
+        background: #d1d5db;
+    }
+
+/* Alt kademe node'lar (ortak stil) */
+.org-node-staff {
+    min-width: 200px;
+}
+
+/* ============================
+   DEPARTMAN SAYFALARI
+   ============================ */
+
+/* Ortada duran blok (başlık + chart) */
+.dept-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Divider + başlık satırı */
+.dept-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.dept-header-line {
+    flex: 1;
+    height: 1px;
+    background-color: #e0e0e0;
+}
+
+.dept-header-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+}
+
+/* Yönetici + alt ekip kolon yapısı (departman görünümü) */
+.dept-manager-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.dept-manager-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Yönetici kutusundan ekibine inen dik çizgi */
+.dept-connector {
+    width: 2px;
+    height: 16px;
+    background-color: #d1d5db;
+}
+
+/* Personel satırı: otomatik 3–4 sütunlu grid */
+.dept-staff-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px 32px; /* satır / sütun araları */
+    max-width: 1100px; /* çok açılmasın, ortaya toplansın */
+    margin: 0 auto;
+    justify-items: center; /* kartları ortala */
+}
+
+    /* Kartların ekstra bir flex ayarına ihtiyacı yok */
+    .dept-staff-row .org-node-staff {
+        max-width: 260px;
+    }
+
+/* ============================
+   ÖZEL HR / TEK ZİNCİR LAYOUT
+   (Birce → Fatma, Gürkan → ekibi vb.)
+   ============================ */
+
+/* Ara yöneticili satırın tamamı */
+.org-chart .mid-row-with-branch {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Ana kolon: ara yönetici + onun ekibi (Gürkan + ekibi / Birce + Fatma) */
+.org-chart .mid-col-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 65%; /* geniş kolon */
+}
+
+/* Sağ taraftaki diğer çalışanlar (Ezgi, Nurselin vb.) */
+.org-chart .mid-col-others {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+/* Ara yöneticiden ekibe inen kısa dik çizgi */
+.org-chart .mid-inner-connector {
+    width: 2px;
+    height: 24px;
+    background: #e0e0e0;
+    margin: 4px 0;
+}
+
+/* Tek kişi için dikey kolon (Birce → Fatma) */
+.org-chart .mid-staff-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: center;
+}
+
+/* Gürkan'ın alt ekibi grid halinde görünsün */
+.org-chart .mid-staff-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 24px;
+    margin-top: 8px;
+    /* BURAYI DARALTALIM */
+    width: auto; /* kolonun tamamını kaplama */
+    max-width: 520px; /* 500–550 arası oynayabilirsin */
+}
+
+    /* Bu grid içindeki personel kutuları – 3 sütun */
+    .org-chart .mid-staff-grid .org-node-staff {
+        flex: 0 0 calc(33.33% - 24px);
+        max-width: 220px; /* biraz daralt */
+    }
 

@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using AngleSharp.Dom;
+using Hangfire;
 using MCC.Korsini.Announcements.Business.Abstract;
 using MCC.Korsini.Announcements.Business.Abstract.AnnouncementMailAbstract;
 using MCC.Korsini.Announcements.Business.Abstract.HangfireAbstract;
@@ -30,6 +31,11 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
         }
         private async Task SendEmail(NotificationCenter_ScheduledAnnouncements_Table announcement, string ID)
         {
+            var annonID = await _announcementsTableService.GetAllAsync();
+            var annonID2= annonID.Find(x => x.AnnouncementId == ID);
+            // Duyuru detay sayfasının bağlantısını oluştur
+            string baseUrl = _configuration["AppSettings:BaseUrl"]; // AppSettings'de BaseUrl ayarını tanımlayın
+            string detailUrl = $"{baseUrl}/Announcement/Detail/{annonID2.ID}";
             var htmlContent = $@"
                 <div>
                     <h3>{announcement.Title_TR}</h3>
@@ -37,7 +43,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     <hr style='margin-top: 20px; margin-bottom: 20px;' />
                     <h3>{announcement.Title_EN}</h3>
                     <div>{announcement.Content_EN}</div>
-                    <p><small>{announcement.CreateDate}</small></p>
+                    <p>Detaylar için <a href='{detailUrl}' target='_blank'>buraya tıklayın</a>.</p>
                 </div>";
 
             string recipientEmail = _configuration["SmtpSettings:RecipientEmail"];
@@ -49,6 +55,12 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                 htmlContent,
                 files.Select(f => f.FilePath).ToList()
             );
+        }
+        private DateTime GetFirstMondayOfMonth(int year, int month)
+        {
+            var firstDayOfMonth = new DateTime(year, month, 1);
+            var daysOffset = (DayOfWeek.Monday - firstDayOfMonth.DayOfWeek + 7) % 7;
+            return firstDayOfMonth.AddDays(daysOffset);
         }
 
         private DateTime CalculateFirstMondayOfNextMonth()
@@ -78,7 +90,7 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
                     RecurringJob.AddOrUpdate(
                         scheduledAnnouncement.ID.ToString(),
                         () => ExecuteMonthlyFirstMondayScheduledAnnouncement(scheduledAnnouncement.ID),
-                        "30 10 * * 1",
+                        "0 30 10 ? * MON#1",
                         TimeZoneInfo.Local); // Her ayın ilk Pazartesi 10:30
                     break;
 
@@ -166,11 +178,17 @@ namespace MCC.Korsini.Announcements.Business.Concrete.HangfireConcrete
             var announcement = await _scheduledAnnouncementsService.GetByIdAsync(announcementId);
             if (announcement != null && announcement.IsActive)
             {
+                var today = DateTime.Now;
+                var firstMondayOfMonth = GetFirstMondayOfMonth(today.Year, today.Month);
+
+                // Eğer bugün ayın ilk Pazartesi değilse, işlem yapılmasın
+                if (today.Date != firstMondayOfMonth)
+                {
+                    announcement.NextRunTime = CalculateFirstMondayOfNextMonth();
+                    await _scheduledAnnouncementsService.UpdateAsync(announcement);
+                    return;
+                }
                 var files = await _scheduledAnnouncementsFilesService.GetFilesByAnnouncementIdAsync(announcement.ID);
-                //var announcementFiles = files.Select(f => new NotificationCenter_Announcement_Files_Table
-                //{
-                //    FilePath = f.FilePath
-                //}).ToList();
                 var announcementsTable = new NotificationCenter_Announcements_Table
                 {
                     Title_TR = announcement.Title_TR,

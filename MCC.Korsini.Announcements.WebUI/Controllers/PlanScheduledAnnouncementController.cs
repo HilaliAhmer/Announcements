@@ -27,26 +27,6 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             _announcementsTableService = announcementsTableService;
             _toastHelper = toastHelper;
         }
-        //private async Task<string> GenerateAnnouncementId()
-        //{
-        //    var yearSuffix = DateTime.Now.Year.ToString().Substring(2);
-        //    var lastAnnouncement = (await _announcementsTableService.GetAllAsync())
-        //        .OrderByDescending(a => a.ID)
-        //        .FirstOrDefault();
-
-        //    int nextId = 1;
-        //    if (lastAnnouncement != null && lastAnnouncement.AnnouncementId.Length >= 2)
-        //    {
-        //        var lastNumberPart = lastAnnouncement.AnnouncementId.Split('-').Last();
-        //        if (int.TryParse(lastNumberPart, out int lastNumber))
-        //        {
-        //            nextId = lastNumber + 1;
-        //        }
-        //    }
-
-        //    return $"DYR-IT-{yearSuffix}-{nextId:D2}";
-        //}
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -119,30 +99,23 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             var scheduleTypeShowData = "";
             if (model.SelectedScheduleType == "MonthlyFirstMonday")
             {
-                // Pazartesi kontrolü
-                var isTodayMonday = currentDay.DayOfWeek == DayOfWeek.Monday;
-                var targetTime = new DateTime(currentDay.Year, currentDay.Month, currentDay.Day, 10, 30, 0);
+                // Bir sonraki ayın ilk Pazartesi gününü hesapla
+                nextRunTime = GetFirstMondayOfNextMonth(currentDay);
 
-                if (isTodayMonday && currentDay < targetTime)
-                {
-                    // Bugün Pazartesi ve saat 10:30'dan önce
-                    nextRunTime = targetTime;
-                }
-                else
-                {
-                    // Bir sonraki Pazartesi
-                    var daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)currentDay.DayOfWeek + 7) % 7;
-                    daysUntilNextMonday = daysUntilNextMonday == 0 ? 7 : daysUntilNextMonday;
-                    var nextMonday = currentDay.AddDays(daysUntilNextMonday);
-                    nextRunTime = new DateTime(nextMonday.Year, nextMonday.Month, nextMonday.Day, 10, 30, 0);
-                }
+                // nextRunTime'i saat 10:30 olarak ayarla
+                nextRunTime = new DateTime(
+                    nextRunTime.Value.Year,
+                    nextRunTime.Value.Month,
+                    nextRunTime.Value.Day,
+                    10, 30, 0
+                );
 
                 model.ScheduledDate = nextRunTime.Value;
                 scheduleTypeShowData = "Her Ayın İlk Pazartesi";
             }
             else if (model.SelectedScheduleType == "Monthly15th")
             {
-                var thisMonth15th = new DateTime(baseDate.Year, baseDate.Month, 15);
+                var thisMonth15th = new DateTime(baseDate.Year, baseDate.Month, 15, 10, 30, 0);
                 if (baseDate <= thisMonth15th)
                 {
                     nextRunTime = AdjustToNextMondayIfWeekend(thisMonth15th);
@@ -331,23 +304,16 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
 
             if (model.SelectedScheduleType == "MonthlyFirstMonday")
             {
-                // Pazartesi kontrolü
-                var isTodayMonday = currentDay.DayOfWeek == DayOfWeek.Monday;
-                var targetTime = new DateTime(currentDay.Year, currentDay.Month, currentDay.Day, 10, 30, 0);
+                // Bir sonraki ayın ilk Pazartesi gününü hesapla
+                nextRunTime = GetFirstMondayOfNextMonth(currentDay);
 
-                if (isTodayMonday && currentDay < targetTime)
-                {
-                    // Bugün Pazartesi ve saat 10:30'dan önce
-                    nextRunTime = targetTime;
-                }
-                else
-                {
-                    // Bir sonraki Pazartesi
-                    var daysUntilNextMonday = ((int)DayOfWeek.Monday - (int)currentDay.DayOfWeek + 7) % 7;
-                    daysUntilNextMonday = daysUntilNextMonday == 0 ? 7 : daysUntilNextMonday;
-                    var nextMonday = currentDay.AddDays(daysUntilNextMonday);
-                    nextRunTime = new DateTime(nextMonday.Year, nextMonday.Month, nextMonday.Day, 10, 30, 0);
-                }
+                // nextRunTime'i saat 10:30 olarak ayarla
+                nextRunTime = new DateTime(
+                    nextRunTime.Value.Year,
+                    nextRunTime.Value.Month,
+                    nextRunTime.Value.Day,
+                    10, 30, 0
+                );
 
                 model.ScheduledDate = nextRunTime.Value;
                 scheduleTypeShowData = "Her Ayın İlk Pazartesi";
@@ -594,12 +560,16 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
 
         private DateTime GetFirstMondayOfNextMonth(DateTime date)
         {
-            var nextMonth = new DateTime(date.Year, date.Month, 1).AddMonths(1);
-            while (nextMonth.DayOfWeek != DayOfWeek.Monday)
+            // Bir sonraki ayın ilk günü
+            var nextMonthFirstDay = new DateTime(date.Year, date.Month, 1).AddMonths(1);
+
+            // İlk Pazartesi gününü bul
+            while (nextMonthFirstDay.DayOfWeek != DayOfWeek.Monday)
             {
-                nextMonth = nextMonth.AddDays(1);
+                nextMonthFirstDay = nextMonthFirstDay.AddDays(1);
             }
-            return nextMonth;
+
+            return nextMonthFirstDay;
         }
 
 

@@ -35,6 +35,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             //_openAiClientService = openAiClientService;
             _htmlSanitizerService = htmlSanitizerService;
             _announcementMailService = announcementMailService;
+            _announcementMailService = announcementMailService;
             _announcementsTableService = announcementsTableService;
         }
 
@@ -149,7 +150,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                 Content_EN = model.Content_EN,
                 Type = model.Type,
                 CreateDate = model.CreateDate,
-                CreatedByUserId = string.IsNullOrEmpty(userId)?10:int.Parse(userId),
+                CreatedByUserId = string.IsNullOrEmpty(userId) ? 10 : int.Parse(userId),
                 AnnouncementYear = DateTime.Now.Year // Burada manuel olarak yıl atanıyor
             };
 
@@ -209,7 +210,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                 {
                     return NotFound();
                 }
-
+                var detailUrl = Url.Action("Detail", "Announcement", new { id = announcementEntity.ID }, Request.Scheme);
                 var htmlContent = $@"
                                 <div>
                                     <h3>{announcementEntity.Title_TR}</h3>
@@ -217,7 +218,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
                                     <hr style='margin-top: 20px; margin-bottom: 20px;' />
                                     <h3>{announcementEntity.Title_EN}</h3>
                                     <div>{announcementEntity.Content_EN}</div>
-                                    <p><small>{announcementEntity.CreateDate}</small></p>
+                                    <p>Detaylar için <a href='{detailUrl}'>buraya tıklayın</a>.</p>
                                 </div>";
 
                 string recipientEmail = _configuration["SmtpSettings:RecipientEmail"];
@@ -232,7 +233,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             {
                 _toastHelper.EmailSendError(ex.Message);
             }
-            
+
             return RedirectToAction("Index");
         }
 
@@ -383,7 +384,7 @@ namespace MCC.Korsini.Announcements.WebUI.Controllers
             {
                 _toastHelper.DeleteError(ex.Message);
             }
-            
+
             return RedirectToAction("Index"); // Silme işleminden sonra listeye yönlendirme
         }
     }
