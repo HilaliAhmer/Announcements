@@ -1,22 +1,22 @@
 # Announcements - ASP.NET Core MVC Project
 
-## 📖 Proje Genel Bakış
+## 📖 Project Overview
 
-**Announcements**, kurum içi duyuruların yönetimi için geliştirilmiş bir ASP.NET Core MVC projesidir. Bu platform, IT ekipleri ve diğer kullanıcılar arasındaki iletişimi kolaylaştırmak için kesintiler, planlı çalışmalar, prosedürlere ve kullanıcı kılavuzlarına hızlı erişim sağlayacak bir duyuru sistemi sunar. Kullanıcılar duyuruları e-posta yoluyla alabilir ve duyurular belirli günlerde planlanabilir.
+**Announcements** is an ASP.NET Core MVC project developed to manage internal announcements within an organization. This platform aims to facilitate communication between IT teams and other users by providing a system for announcements such as outages, planned maintenance, procedures, and user guides.
 
 ## 🛠️ Architecture and Technology Stack
 
-### Mimari Tasarım
+### Architecture Design
 
-Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
+The project was developed using the following layered architecture:
 
-- **Business Layer:** İş mantığı katmanı.
-- **Core Layer:** Ortak bileşenler ve yapıların bulunduğu katman.
-- **DataAccess Layer:** Veri erişim işlemlerini yöneten katman.
-- **Entities Layer:** Varlık sınıflarının tanımlandığı katman.
-- **Web UI Layer:** Kullanıcı arayüzünü sağlayan katman.
+- **Business Layer:** Business logic layer.
+- **Core Layer:** The layer with common components and structures.
+- **DataAccess Layer:** The layer that manages data access operations.
+- **Entities Layer:** The layer where entity classes are defined.
+- **Web UI Layer:** The layer that provides the user interface.
 
-### Kullanılan Teknolojiler
+### Technologies Used
 
 - **Backend:** ASP.NET Core MVC 8.0
 - **Frontend:**
@@ -28,59 +28,59 @@ Proje, aşağıdaki katmanlı mimariyi kullanarak geliştirilmiştir:
 - **Database:** SQL Server
 - **ORM:** Entity Framework Core 8.0.0
 
-## 🖥️ Kurulum ve Ayarlama
+## 🖥️ Installation and Setup
 
-### Ön Koşullar
+### Pre-requisites
 
-Projeyi çalıştırmadan önce aşağıdaki bileşenlerin yüklü olduğundan emin olun:
+Before running the project, make sure that the following components are installed:
 
-- **.NET SDK 8.0** veya daha üstü
-- **Visual Studio 2022** (ya da ASP.NET Core MVC destekleyen başka bir IDE)
+- **.NET SDK 8.0** or higher
+- **Visual Studio 2022** (or other IDE that supports ASP.NET Core MVC)
 - **SQL Server**
 
-### Kurulum Aşamaları
+### Installation Stages
 
-1. **Depoyu Klonlayın**  
-Depoyu yerel makinenize klonlayın:
+1. **Clone the Warehouse**  
+Clone the repository to your local machine:
 ```bash
 git clone https://github.com/HilaliAhmer/Announcements.git
 ```
 
-2. **Projeyi Açın**  
-Visual Studio 2022 veya Visual Studio Code kullanarak projeyi açın.
+2. **Open Project**  
+Open the project using Visual Studio 2022 or Visual Studio Code.
 
-3. **Gerekli Bağımlılıkları Yükleyin**  
-NuGet bağımlılıklarını yükleyin:
-   - Visual Studio'da `Tools > NuGet Package Manager > Manage NuGet Packages for Solution` yolunu izleyin.
-   - Tüm bağımlılıkların yüklendiğinden emin olun.
+3. **Install Required Dependencies** 
+Install NuGet dependencies:
+   - In Visual Studio, go to `Tools > NuGet Package Manager > Manage NuGet Packages for Solution`.
+   - Make sure all dependencies are installed.
 
-4. **Veritabanını Yapılandırın**  
-   - `appsettings.json` dosyasını açarak veritabanı bağlantı ayarlarını yapılandırın.
-   - Aşağıdaki komutu kullanarak migration işlemini çalıştırın:
+4. **Configure Database**  
+   - Open the `appsettings.json` file and configure the database connection settings.
+   - Run the migration process using the following command:
 ```bash
 dotnet ef database update
 ```
 
-5. **Uygulamayı Çalıştırın**  
-Projeyi çalıştırmak için şu komutu kullanın:
+5. **Run the Application**  
+Use the following command to run the project:
 ```bash
 dotnet run
 ```
 
-6. **Web Tarayıcınızdan Erişim Sağlayın**  
-Aşağıdaki URL'yi ziyaret ederek uygulamayı çalıştırabilirsiniz:
+6. **Get Access from Your Web Browser**  
+You can run the application by visiting the following URL:
 ```bash
 http://localhost:5000
 ```
 
-## 🤝 Katkıda Bulunmak
+## 🤝 Contributing
 
-Projeye katkıda bulunmak için aşağıdaki adımları takip edebilirsiniz:
+You can follow the steps below to contribute to the project:
 
-1. Depoyu fork edin.
-2. Yeni bir özellik geliştirin veya bir hata düzeltin.
-3. Pull request göndererek değişikliklerinizi paylaşın.
+1. Fork the repository.
+2. Develop a new feature or fix a bug.
+3. Share your changes by sending a pull request.
 
-## 📄 Lisans
+## 📄 License
 
-Bu proje, [MIT Lisansı](LICENSE) altında lisanslanmıştır.
+This project is licensed under the [MIT Licence](LICENSE.txt).
